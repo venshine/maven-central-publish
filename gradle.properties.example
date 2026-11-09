@@ -1,0 +1,11 @@
+# 复制到 ~/.gradle/gradle.properties（用户级文件，不在仓库里），并替换为自己的值。
+# 不要把真实值写进项目内的任何文件。也可以改用同名环境变量，见 README。
+
+# Central Portal 的 User Token（https://central.sonatype.com/usertoken 生成），不是登录密码
+mavenCentralUsername=<token-username>
+mavenCentralPassword=<token-password>
+
+# 内存签名：用 `gpg --export-secret-keys --armor <KEY_ID>` 导出的私钥，换行写成 \n 压成一行
+signingInMemoryKey=<armored-private-key-on-one-line>
+signingInMemoryKeyId=<last-8-hex-chars-of-key-id>
+signingInMemoryKeyPassword=<key-passphrase>
