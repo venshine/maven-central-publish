@@ -1,9 +1,9 @@
-# gradle-bintray-upload
+# maven-central-publish
 
 [English](README.md) | 简体中文
 
 > **Bintray 和 JCenter 已经关停，原来的 `bintray.gradle` 不能再用了。**
-> 本仓库已改为演示如何通过 Central Portal 把 Android 库发布到 **Maven Central**。仓库名保持不变，旧链接仍然有效。
+> 本仓库已改为演示如何通过 Central Portal 把 Android 库发布到 **Maven Central**。仓库已由 `gradle-bintray-upload` 改名，旧链接会自动跳转到这里。
 > 原来的（已过时，基于 JCenter）文章仍保留供参考：[Android Studio上传Library库到JCenter，并同步到Maven Central](http://blog.csdn.net/venshine/article/details/51742926)。
 
 ## 仓库内容

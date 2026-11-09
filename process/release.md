@@ -23,7 +23,7 @@ Also re-check the facts the README quotes (OSSRH sunset, Portal API, requirement
 ## Tag
 
 - The tag name is the bare version, without a `v` prefix: `1.0.0`
-- Annotated tag with the message `gradle-bintray-upload X.Y.Z`, created on the release commit and pushed to `origin`
+- Annotated tag with the message `maven-central-publish X.Y.Z`, created on the release commit and pushed to `origin`
 
 ## GitHub Release
 

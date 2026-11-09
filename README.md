@@ -1,9 +1,9 @@
-# gradle-bintray-upload
+# maven-central-publish
 
 English | [简体中文](README-CN.md)
 
 > **Bintray and JCenter have been shut down, so the old `bintray.gradle` no longer works.**
-> This repository now shows how to publish an Android library to **Maven Central** through the Central Portal. The repository name is kept so old links still resolve.
+> This repository now shows how to publish an Android library to **Maven Central** through the Central Portal. It was renamed from `gradle-bintray-upload`; old links redirect here.
 > The original (outdated, JCenter-era) article is still here for reference: [Android Studio: upload a library to JCenter and sync to Maven Central](http://blog.csdn.net/venshine/article/details/51742926).
 
 ## What this repository contains
