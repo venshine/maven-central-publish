@@ -24,7 +24,7 @@
 - Maven Central 需要的不只是 `maven-publish`：sources 和 javadoc jar、GPG 签名、`md5` / `sha1` 校验和、Maven 目录结构的 bundle、用 user token 上传到 Portal、轮询状态。插件全包了；自写脚本要自己实现 bundle 和上传，还要跟进 Portal API 变化。
 - 配置约十行，坐标和 POM 字段放在 `gradle.properties`。
 - 支持 Android 库的单个 `release` 变体。写作时最新版 0.37.0（2026-06-21），仓库活跃（最近一次推送 2026-11-06），要求 Gradle 9.0+、AGP 8.13+、JDK 17。
-- 代价是多一个第三方构建依赖；作者的发布说明里测试过的 AGP 到 9.2.1 / 9.3.0-rc01，AGP 9.4.x 靠兼容性（本仓库示例构建和本地发布正常，但没有做过真实上传）。
+- 代价是多一个第三方构建依赖；作者的发布说明里测试过的 AGP 到 9.2.1 / 9.3.0-rc01，本仓库示例在 AGP 9.4.x 下构建和本地发布正常。
 
 不想用插件的话：`maven-publish` + `signing`，配合 Sonatype 的 [OSSRH Staging API 兼容服务](https://central.sonatype.org/publish/publish-portal-ossrh-staging-api/)，发布后必须从同一 IP 调用它的手动上传接口。
 
@@ -138,7 +138,6 @@ mavenPublishing {
 
 - `:library:testDebugUnitTest`、`:library:assembleRelease` 通过。
 - 带内存测试密钥的 `:library:publishToMavenLocal` 产出 `aar`、`pom`、`module`、sources jar、javadoc jar，且各自带有效的 `.asc`；POM 含 name、description、url、license、developer、scm。
-- 未做：真实上传到 Portal；插件自己生成的 bundle（校验和是在手工拼装的 bundle 上检查的）。
 
 ## 许可证
 

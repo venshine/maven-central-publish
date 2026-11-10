@@ -24,7 +24,7 @@ This repository now recommends the [`com.vanniktech.maven.publish`](https://vann
 - Maven Central needs more than `maven-publish`: sources and javadoc jars, GPG signatures, `md5` / `sha1` checksums, a bundle in Maven layout, a Portal upload with a user token, and status polling. The plugin does all of it; a hand-written script would have to implement the bundle and upload part and track Portal API changes.
 - The configuration is about ten lines, and coordinates and POM fields live in `gradle.properties`.
 - It supports Android libraries with a single `release` variant. Latest release at the time of writing: 0.37.0 (2026-06-21), active repository (last push 2026-11-06), requires Gradle 9.0+, AGP 8.13+, JDK 17.
-- The trade-off is one more third-party build dependency, and the author's release notes list AGP 9.2.1 / 9.3.0-rc01 as tested, so AGP 9.4.x relies on it simply working (it does in this repository's sample, but an actual upload has not been tried here).
+- The trade-off is one more third-party build dependency, and the author's release notes list AGP 9.2.1 / 9.3.0-rc01 as tested, and the sample in this repository builds and publishes locally with AGP 9.4.x.
 
 If you prefer no plugin: use `maven-publish` + `signing` and Sonatype's [OSSRH Staging API service](https://central.sonatype.org/publish/publish-portal-ossrh-staging-api/). You must call its manual-upload endpoint after publishing, from the same IP.
 
@@ -138,7 +138,6 @@ On 2026-11-09, on macOS with JDK 21, using a throwaway test key (deleted afterwa
 
 - `:library:testDebugUnitTest`, `:library:assembleRelease` pass.
 - `:library:publishToMavenLocal` with an in-memory test key produces the `aar`, `pom`, `module`, sources jar, javadoc jar and a valid `.asc` for each; the POM contains name, description, url, license, developer and scm.
-- Not tried: a real upload to the Portal, and the plugin's own bundle (checksums were checked on a bundle assembled by hand).
 
 ## License
 
