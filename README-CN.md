@@ -11,6 +11,8 @@
 | 路径 | 作用 |
 |---|---|
 | [`library/build.gradle`](library/build.gradle) | 最小 Android 库示例，文件末尾是要复制的发布配置 |
+| [`library-kts/build.gradle.kts`](library-kts/build.gradle.kts) | 同一个库模块的 Kotlin DSL 写法，复用 `library/` 的源码，发布坐标为 `maven-central-sample-kts` |
+| [`library-kts/gradle.properties`](library-kts/gradle.properties) | 模块级覆盖 `POM_ARTIFACT_ID` / `POM_NAME`，用于一个工程发布多个模块的情况 |
 | [`build.gradle`](build.gradle) | 声明发布插件版本 |
 | [`gradle.properties`](gradle.properties) | 项目元数据（`GROUP`、`VERSION_NAME`、`POM_*`），会写进 POM |
 | [`gradle.properties.example`](gradle.properties.example) | 放到 `~/.gradle/gradle.properties` 的凭据模板（不含真实值） |
@@ -106,7 +108,32 @@ mavenPublishing {
 }
 ```
 
-把 [`gradle.properties`](gradle.properties) 里的 `GROUP`、`VERSION_NAME`、`POM_*` 复制到自己项目的 `gradle.properties` 并替换。`POM_NAME`、`POM_DESCRIPTION`、`POM_URL`、许可证、开发者和 SCM 都是 Central 的必填项（[要求](https://central.sonatype.org/publish/requirements/)）。
+用 Kotlin DSL 的话，根目录 `build.gradle.kts`：
+
+```kotlin
+plugins {
+    id("com.android.library") version "9.4.1" apply false
+    id("com.vanniktech.maven.publish") version "0.37.0" apply false
+}
+```
+
+库模块 `build.gradle.kts`（完整示例见 [`library-kts/build.gradle.kts`](library-kts/build.gradle.kts)）：
+
+```kotlin
+plugins {
+    id("com.android.library")
+    id("com.vanniktech.maven.publish")
+}
+
+mavenPublishing {
+    publishToMavenCentral()   // 要自动发布改成 publishToMavenCentral(automaticRelease = true)
+    if (providers.gradleProperty("signingInMemoryKey").isPresent) {
+        signAllPublications()
+    }
+}
+```
+
+把 [`gradle.properties`](gradle.properties) 里的 `GROUP`、`VERSION_NAME`、`POM_*` 复制到自己项目的 `gradle.properties` 并替换。一个工程要发布多个模块时，像 [`library-kts/gradle.properties`](library-kts/gradle.properties) 那样给每个模块单独写 `POM_ARTIFACT_ID` 和 `POM_NAME`，其余字段继承根目录。`POM_NAME`、`POM_DESCRIPTION`、`POM_URL`、许可证、开发者和 SCM 都是 Central 的必填项（[要求](https://central.sonatype.org/publish/requirements/)）。
 
 插件会自动发布 `release` 变体，并带上 sources 和 javadoc jar。发到 Central 的版本号不能以 `-SNAPSHOT` 结尾。
 
@@ -138,6 +165,11 @@ mavenPublishing {
 
 - `:library:testDebugUnitTest`、`:library:assembleRelease` 通过。
 - 带内存测试密钥的 `:library:publishToMavenLocal` 产出 `aar`、`pom`、`module`、sources jar、javadoc jar，且各自带有效的 `.asc`；POM 含 name、description、url、license、developer、scm。
+
+2026-11-15，同样环境，验证 Kotlin DSL 模块：
+
+- `:library-kts:testDebugUnitTest`、`:library-kts:assembleRelease` 通过。
+- `:library-kts:publishToMavenLocal` 不带密钥时产出未签名产物；带内存测试密钥时以 `maven-central-sample-kts` 产出同样 5 个文件，各自的 `.asc` 用测试公钥验签通过；POM 的 `artifactId` 和 `name` 取自模块 `gradle.properties`，其余字段取自根目录。
 
 ## 许可证
 

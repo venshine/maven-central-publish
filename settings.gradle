@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 
 rootProject.name = 'maven-central-sample'
 include ':library'
+include ':library-kts'

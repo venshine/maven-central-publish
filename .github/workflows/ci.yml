@@ -18,4 +18,4 @@ jobs:
           distribution: temurin
           java-version: 21
       - uses: gradle/actions/setup-gradle@v6
-      - run: ./gradlew :library:testDebugUnitTest :library:assembleRelease :library:publishToMavenLocal
+      - run: ./gradlew :library:testDebugUnitTest :library:assembleRelease :library:publishToMavenLocal :library-kts:testDebugUnitTest :library-kts:assembleRelease :library-kts:publishToMavenLocal

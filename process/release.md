@@ -10,12 +10,12 @@ This repository is a tutorial plus a sample project. It publishes **no artifact*
 
 - Semantic versioning `X.Y.Z` for the tag. Bump when the recommended plugin, the AGP / Gradle baseline or the tutorial steps change.
 - `VERSION_NAME` in `gradle.properties` is only the sample's version and is not tied to the tag.
-- Before tagging, check that the plugin version in `build.gradle`, `library/build.gradle` usage and the snippets in `README.md` / `README-CN.md` agree (`grep -rn "com.vanniktech.maven.publish" build.gradle README.md README-CN.md`).
+- Before tagging, check that the plugin version in `build.gradle`, `library/build.gradle` / `library-kts/build.gradle.kts` usage and the snippets in `README.md` / `README-CN.md` agree (`grep -rn "com.vanniktech.maven.publish" build.gradle README.md README-CN.md`).
 
 ## Pre-release checks
 
 ```bash
-./gradlew :library:testDebugUnitTest :library:assembleRelease :library:publishToMavenLocal
+./gradlew :library:testDebugUnitTest :library:assembleRelease :library:publishToMavenLocal :library-kts:testDebugUnitTest :library-kts:assembleRelease :library-kts:publishToMavenLocal
 ```
 
 Also re-check the facts the README quotes (OSSRH sunset, Portal API, requirements) against central.sonatype.org, and the plugin's latest release at https://github.com/vanniktech/gradle-maven-publish-plugin/releases.

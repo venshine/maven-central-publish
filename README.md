@@ -11,6 +11,8 @@ English | [简体中文](README-CN.md)
 | Path | Purpose |
 |---|---|
 | [`library/build.gradle`](library/build.gradle) | A minimal Android library with the publishing block you copy (see the bottom of the file) |
+| [`library-kts/build.gradle.kts`](library-kts/build.gradle.kts) | The same library module in Kotlin DSL; it reuses the sources of `library/` and publishes as `maven-central-sample-kts` |
+| [`library-kts/gradle.properties`](library-kts/gradle.properties) | Module-level override of `POM_ARTIFACT_ID` / `POM_NAME`, for a build with more than one published module |
 | [`build.gradle`](build.gradle) | Declares the publishing plugin version |
 | [`gradle.properties`](gradle.properties) | Project metadata (`GROUP`, `VERSION_NAME`, `POM_*`) that ends up in the POM |
 | [`gradle.properties.example`](gradle.properties.example) | Credential template for `~/.gradle/gradle.properties` (no real values) |
@@ -106,7 +108,32 @@ mavenPublishing {
 }
 ```
 
-Copy the `GROUP`, `VERSION_NAME` and `POM_*` entries from [`gradle.properties`](gradle.properties) into your project's `gradle.properties` and replace them. `POM_NAME`, `POM_DESCRIPTION`, `POM_URL`, a license, a developer and the SCM entries are all required by Central ([requirements](https://central.sonatype.org/publish/requirements/)).
+Using Kotlin DSL? Root `build.gradle.kts`:
+
+```kotlin
+plugins {
+    id("com.android.library") version "9.4.1" apply false
+    id("com.vanniktech.maven.publish") version "0.37.0" apply false
+}
+```
+
+Library module `build.gradle.kts` (full example: [`library-kts/build.gradle.kts`](library-kts/build.gradle.kts)):
+
+```kotlin
+plugins {
+    id("com.android.library")
+    id("com.vanniktech.maven.publish")
+}
+
+mavenPublishing {
+    publishToMavenCentral()   // use publishToMavenCentral(automaticRelease = true) for automatic release
+    if (providers.gradleProperty("signingInMemoryKey").isPresent) {
+        signAllPublications()
+    }
+}
+```
+
+Copy the `GROUP`, `VERSION_NAME` and `POM_*` entries from [`gradle.properties`](gradle.properties) into your project's `gradle.properties` and replace them. If one build publishes several modules, give each module its own `gradle.properties` with `POM_ARTIFACT_ID` and `POM_NAME`, as [`library-kts/gradle.properties`](library-kts/gradle.properties) does; the other entries are inherited from the root. `POM_NAME`, `POM_DESCRIPTION`, `POM_URL`, a license, a developer and the SCM entries are all required by Central ([requirements](https://central.sonatype.org/publish/requirements/)).
 
 The plugin publishes the `release` variant with a sources jar and a javadoc jar automatically. Version must not end in `-SNAPSHOT` for Central.
 
@@ -138,6 +165,11 @@ On 2026-11-09, on macOS with JDK 21, using a throwaway test key (deleted afterwa
 
 - `:library:testDebugUnitTest`, `:library:assembleRelease` pass.
 - `:library:publishToMavenLocal` with an in-memory test key produces the `aar`, `pom`, `module`, sources jar, javadoc jar and a valid `.asc` for each; the POM contains name, description, url, license, developer and scm.
+
+On 2026-11-15, same setup, for the Kotlin DSL module:
+
+- `:library-kts:testDebugUnitTest`, `:library-kts:assembleRelease` pass.
+- `:library-kts:publishToMavenLocal` without a key produces unsigned artifacts; with an in-memory test key it produces the same five files as `maven-central-sample-kts`, each with a `.asc` that verifies against the test public key; the POM takes `artifactId` and `name` from the module's `gradle.properties` and the other fields from the root.
 
 ## License
 
